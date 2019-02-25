@@ -4,7 +4,7 @@ import org.json.JSONArray
 import org.junit.Test
 import org.kethereum.model.ChainDefinition
 import org.kethereum.model.ChainId
-import org.walleth.etherscan.parseEtherScanTransactions
+import org.walleth.dataprovider.parseEtherScanTransactions
 
 class TheEtherScanParser {
 

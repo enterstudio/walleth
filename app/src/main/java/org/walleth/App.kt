@@ -44,7 +44,7 @@ import org.walleth.data.networks.InitializingCurrentAddressProvider
 import org.walleth.data.networks.NetworkDefinitionProvider
 import org.walleth.data.syncprogress.SyncProgressProvider
 import org.walleth.data.tokens.CurrentTokenProvider
-import org.walleth.data.tokens.getEthTokenForChain
+import org.walleth.data.tokens.getRootTokenForChain
 import org.walleth.util.DelegatingSocketFactory
 import org.walleth.viewmodels.TransactionListViewModel
 import org.walleth.walletconnect.WalletConnectDriver
@@ -88,6 +88,9 @@ open class App : MultiDexApplication() {
                         override fun migrate(database: SupportSQLiteDatabase) {
                             // we need to delete all transactions as the chainIDs have been changed
                             database.execSQL("DELETE FROM `transactions`")
+
+                            // we need to delete all tokens as the root token name might have changed (before always ETH)
+                            database.execSQL("DELETE FROM `tokens`")
                         }
                     })
                     .build()
@@ -157,7 +160,7 @@ open class App : MultiDexApplication() {
         val currentTokenProvider: CurrentTokenProvider by inject()
         val networkDefinitionProvider: NetworkDefinitionProvider by inject()
 
-        currentTokenProvider.setCurrent(getEthTokenForChain(networkDefinitionProvider.getCurrent()))
+        currentTokenProvider.setCurrent(getRootTokenForChain(networkDefinitionProvider.getCurrent()))
     }
 
     open fun executeCodeWeWillIgnoreInTests() {
